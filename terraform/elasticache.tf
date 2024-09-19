@@ -1,7 +1,7 @@
 resource "aws_security_group" "cache" {
   name        = "${var.resource_prefix}-security-group-cache"
   description = "inbound: TCP/6379 + outbound: none"
-  vpc_id      = aws_vpc.default.idid
+  vpc_id      = aws_vpc.default.id
 
   ingress {
     description = "Enable communication to the Amazon ElastiCache cluster. "
@@ -19,8 +19,8 @@ resource "aws_security_group" "cache" {
 resource "aws_elasticache_subnet_group" "default" {
   name = "${var.resource_prefix}-subnet-group-cache"
   subnet_ids = [
-    aws_subnet.subnet_private_a_id,
-    aws_subnet.subnet_private_b_id
+    aws_subnet.subnet_private_a.id,
+    aws_subnet.subnet_private_b.id
   ]
 
   tags = {

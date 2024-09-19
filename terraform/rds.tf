@@ -1,7 +1,7 @@
 resource "aws_security_group" "rds" {
   name        = "${var.resource_prefix}-security-group-rds"
   description = "inbound: TCP/3306 + outbound: none"
-  vpc_id      = aws_vpc.default.idid
+  vpc_id      = aws_vpc.default.id
 
   ingress {
     description = "MYSQL/Aurora"
@@ -19,8 +19,8 @@ resource "aws_security_group" "rds" {
 resource "aws_db_subnet_group" "default" {
   name = "${var.resource_prefix}-subnet-group-rds"
   subnet_ids = [
-    aws_subnet.subnet_private_a_id,
-    aws_subnet.subnet_private_b_id
+    aws_subnet.subnet_private_a.id,
+    aws_subnet.subnet_private_b.id
   ]
 
   tags = {

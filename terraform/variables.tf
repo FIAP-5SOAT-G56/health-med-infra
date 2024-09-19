@@ -58,7 +58,7 @@ variable "db_parameter_group_name" {
 }
 
 variable "db_name" {
-  default = "health-med"
+  default = "health_med"
 }
 
 variable "cache_engine" {
