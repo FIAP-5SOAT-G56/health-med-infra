@@ -1,10 +1,14 @@
 resource "aws_ecr_repository" "health_med_api" {
-  name                 = "${var.resource_prefix}-ecr/fiap-health-med-api"
+  name                 = "${var.resource_prefix}/health-med-api"
   image_tag_mutability = "MUTABLE"
   force_delete         = true
 
   image_scanning_configuration {
     scan_on_push = true
+  }
+
+  tags = {
+    Name = "${var.resource_prefix}/health-med-api"
   }
 }
 
@@ -30,4 +34,8 @@ resource "aws_ecr_lifecycle_policy" "health_med_api" {
     ]
   }
   EOF
+
+  depends_on = [
+    aws_ecr_repository.health_med_api
+  ]
 }

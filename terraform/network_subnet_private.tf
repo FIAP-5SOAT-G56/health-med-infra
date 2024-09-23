@@ -1,21 +1,3 @@
-resource "aws_eip" "default" {
-  domain = "vpc"
-
-  tags = {
-    Name = "${var.resource_prefix}-elastic-ip"
-  }
-}
-
-resource "aws_nat_gateway" "default" {
-  allocation_id = aws_eip.default.id
-  subnet_id     = aws_subnet.subnet_public_a.id
-
-  tags = {
-    Name = "${var.resource_prefix}-nat-gateway"
-  }
-
-}
-
 resource "aws_subnet" "subnet_private_a" {
   vpc_id                  = aws_vpc.default.id
   cidr_block              = "10.0.2.0/24"
@@ -25,6 +7,10 @@ resource "aws_subnet" "subnet_private_a" {
   tags = {
     Name = "${var.resource_prefix}-subnet-private-a"
   }
+
+  depends_on = [
+    aws_vpc.default
+  ]
 }
 
 resource "aws_subnet" "subnet_private_b" {
@@ -36,6 +22,10 @@ resource "aws_subnet" "subnet_private_b" {
   tags = {
     Name = "${var.resource_prefix}-subnet-private-b"
   }
+
+  depends_on = [
+    aws_vpc.default
+  ]
 }
 
 resource "aws_route_table" "rtb_private_a" {
@@ -49,11 +39,20 @@ resource "aws_route_table" "rtb_private_a" {
   tags = {
     Name = "${var.resource_prefix}-rtb-private-a"
   }
+
+  depends_on = [
+    aws_nat_gateway.default
+  ]
 }
 
 resource "aws_route_table_association" "rtb_private_a" {
   subnet_id      = aws_subnet.subnet_private_a.id
   route_table_id = aws_route_table.rtb_private_a.id
+
+  depends_on = [
+    aws_subnet.subnet_private_a,
+    aws_route_table.rtb_private_a
+  ]
 }
 
 resource "aws_route_table" "rtb_private_b" {
@@ -67,11 +66,20 @@ resource "aws_route_table" "rtb_private_b" {
   tags = {
     Name = "${var.resource_prefix}-rtb-private-b"
   }
+
+  depends_on = [
+    aws_nat_gateway.default
+  ]
 }
 
 resource "aws_route_table_association" "rtb_private_b" {
   subnet_id      = aws_subnet.subnet_private_b.id
   route_table_id = aws_route_table.rtb_private_b.id
+
+  depends_on = [
+    aws_subnet.subnet_private_b,
+    aws_route_table.rtb_private_b
+  ]
 }
 
 # Outputs

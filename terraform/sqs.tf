@@ -30,12 +30,21 @@ resource "aws_sqs_queue" "api_appointment_created" {
   tags = {
     Name = "${var.resource_prefix}-api_appointment-created-queue"
   }
+
+  depends_on = [
+    aws_sqs_queue.api_appointment_created_dlq
+  ]
 }
 
 resource "aws_sns_topic_subscription" "api_appointment_created_subscription" {
   topic_arn = aws_sns_topic.api_appointment_created.arn
   protocol  = "sqs"
   endpoint  = aws_sqs_queue.api_appointment_created.arn
+
+  depends_on = [
+    aws_sns_topic.api_appointment_created,
+    aws_sqs_queue.api_appointment_created
+  ]
 }
 
 data "aws_iam_policy_document" "api_appointment_created_policy" {
@@ -62,6 +71,11 @@ data "aws_iam_policy_document" "api_appointment_created_policy" {
 resource "aws_sqs_queue_policy" "api_appointment_created_queue_policy" {
   queue_url = aws_sqs_queue.api_appointment_created.id
   policy    = data.aws_iam_policy_document.api_appointment_created_policy.json
+
+  depends_on = [
+    aws_sqs_queue.api_appointment_created,
+    data.aws_iam_policy_document.api_appointment_created_policy
+  ]
 }
 
 # =====================================================
@@ -96,6 +110,10 @@ resource "aws_sqs_queue" "api_appointment_cancelled" {
   tags = {
     Name = "${var.resource_prefix}-api_appointment-cancelled-queue"
   }
+
+  depends_on = [
+    aws_sqs_queue.api_appointment_cancelled_dlq
+  ]
 }
 
 resource "aws_sns_topic_subscription" "api_appointment_cancelled_subscription" {
@@ -128,4 +146,9 @@ data "aws_iam_policy_document" "api_appointment_cancelled_policy" {
 resource "aws_sqs_queue_policy" "api_appointment_cancelled_queue_policy" {
   queue_url = aws_sqs_queue.api_appointment_cancelled.id
   policy    = data.aws_iam_policy_document.api_appointment_cancelled_policy.json
+
+  depends_on = [
+    aws_sqs_queue.api_appointment_cancelled,
+    data.aws_iam_policy_document.api_appointment_cancelled_policy
+  ]
 }

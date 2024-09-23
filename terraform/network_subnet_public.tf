@@ -1,11 +1,3 @@
-resource "aws_internet_gateway" "default" {
-  vpc_id = aws_vpc.default.id
-
-  tags = {
-    Name = "${var.resource_prefix}-igw"
-  }
-}
-
 resource "aws_subnet" "subnet_public_a" {
   vpc_id                  = aws_vpc.default.id
   cidr_block              = "10.0.0.0/24"
@@ -15,6 +7,10 @@ resource "aws_subnet" "subnet_public_a" {
   tags = {
     Name = "${var.resource_prefix}-subnet-public-a"
   }
+
+  depends_on = [
+    aws_vpc.default
+  ]
 }
 
 resource "aws_subnet" "subnet_public_b" {
@@ -26,6 +22,10 @@ resource "aws_subnet" "subnet_public_b" {
   tags = {
     Name = "${var.resource_prefix}-subnet-public-b"
   }
+
+  depends_on = [
+    aws_vpc.default
+  ]
 }
 
 resource "aws_default_route_table" "rtb_public" {
@@ -39,16 +39,30 @@ resource "aws_default_route_table" "rtb_public" {
   tags = {
     Name = "${var.resource_prefix}-rtb-public"
   }
+
+  depends_on = [
+    aws_internet_gateway.default,
+  ]
 }
 
 resource "aws_route_table_association" "rtb_public_a" {
   subnet_id      = aws_subnet.subnet_public_a.id
   route_table_id = aws_vpc.default.default_route_table_id
+
+  depends_on = [
+    aws_subnet.subnet_public_a,
+    aws_default_route_table.rtb_public
+  ]
 }
 
 resource "aws_route_table_association" "rtb_public_b" {
   subnet_id      = aws_subnet.subnet_public_b.id
   route_table_id = aws_vpc.default.default_route_table_id
+
+  depends_on = [
+    aws_subnet.subnet_public_b,
+    aws_default_route_table.rtb_public
+  ]
 }
 
 # Outputs
