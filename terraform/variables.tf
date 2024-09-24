@@ -69,6 +69,10 @@ variable "cache_node_type" {
   default = "cache.t3.micro"
 }
 
+variable "ecs_service_desired_count" {
+  default = 2
+}
+
 # Secrets
 variable "DB_USERNAME" {
   type = string
