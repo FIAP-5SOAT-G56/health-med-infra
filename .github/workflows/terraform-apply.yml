@@ -8,6 +8,7 @@ on:
       - main
     paths:
       - terraform/**
+      - .github/workflows/terraform-apply.yml
 
 env:
   TF_LOG: INFO
@@ -36,6 +37,13 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Load AWS secrets
+        uses: aws-actions/aws-secretsmanager-get-secrets@v2
+        with:
+          secret-ids: |
+            TF_VAR, ${{ secrets.AWS_API_SECRETS_ID }}
+          parse-json-secrets: true
 
       - name: Terraform init
         id: init

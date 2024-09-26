@@ -3,7 +3,7 @@ terraform {
 
   backend "s3" {
     bucket = "fiap-health-med-tfstate"
-    key    = "fiap-health-med-notifier.tfstate"
+    key    = "fiap-health-med-infra.tfstate"
     region = "us-east-1"
   }
 
