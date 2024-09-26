@@ -47,8 +47,8 @@ resource "aws_ecs_task_definition" "health_med_api" {
       name      = "health-med-api",
       image     = "${aws_ecr_repository.health_med_api.repository_url}:latest",
       essential = true,
-      cpu       = 2048,
-      memory    = 8192,
+      cpu       = 256
+      memory    = 512
 
       portMappings = [
         {

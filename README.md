@@ -47,6 +47,8 @@ export DB_HOSTNAME=xxxxxx
 export DB_USERNAME=xxxxxx
 export DB_PASSWORD=xxxxxx
 export REDIS_HOSTNAME=xxxxxx
+export SENDGRID_API_KEY=xxxxxx
+export SENDGRID_EMAIL=xxxxxx
 
 ```
 Or configure it in windows environments.
