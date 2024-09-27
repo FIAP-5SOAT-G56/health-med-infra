@@ -74,6 +74,14 @@ variable "ecs_service_desired_count" {
 }
 
 # Secrets
+variable "AWS_ACCESS_KEY_ID" {
+  type = string
+}
+
+variable "AWS_SECRET_ACCESS_KEY" {
+  type = string
+}
+
 variable "DB_HOSTNAME" {
   type = string
 }

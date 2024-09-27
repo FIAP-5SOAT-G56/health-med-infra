@@ -13,7 +13,7 @@ resource "aws_iam_role" "ecs_task_definition_role" {
   assume_role_policy = data.aws_iam_policy_document.ecs_task_definition.json
 
   tags = {
-    Name = "${var.resource_prefix}-health-med-api_ecs-task-definition_role"
+    Name = "${var.resource_prefix}-ecs-task-definition_role"
   }
 
   depends_on = [
@@ -89,10 +89,10 @@ resource "aws_ecs_task_definition" "health_med_api" {
       },
 
       healthcheck = {
-        command     = ["CMD-SHELL", "curl -f http://localhost:3000 || exit 1"],
+        command     = ["CMD-SHELL", "curl -f http://127.0.0.1:3000 || exit 1"],
         timeout     = 5,
-        interval    = 30,
-        retries     = 3,
+        interval    = 180,
+        retries     = 10,
         startPeriod = null
       },
 
@@ -100,6 +100,18 @@ resource "aws_ecs_task_definition" "health_med_api" {
         {
           name  = "NODE_ENV",
           value = "production"
+        },
+        {
+          name  = "AWS_REGION",
+          value = "${var.region}"
+        },
+        {
+          name  = "AWS_ACCESS_KEY_ID"
+          value = "${var.AWS_ACCESS_KEY_ID}"
+        },
+        {
+          name  = "AWS_SECRET_ACCESS_KEY"
+          value = "${var.AWS_SECRET_ACCESS_KEY}"
         },
         {
           name  = "DB_DATABASE",

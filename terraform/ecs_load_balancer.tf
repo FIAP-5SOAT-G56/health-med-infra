@@ -99,3 +99,7 @@ resource "aws_alb_listener" "health_med_api" {
     aws_alb_target_group.health_med_api
   ]
 }
+
+output "health_med_api_lb_dns_name" {
+  value = aws_alb.health_med_api.dns_name
+}

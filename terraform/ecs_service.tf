@@ -1,4 +1,4 @@
-resource "aws_security_group" "ecs_service" {
+resource "aws_security_group" "health_med_api_ecs_service" {
   name        = "${var.resource_prefix}-health-med-api-sg-ecs-service"
   description = "Inbound: All + Outbound: All"
   vpc_id      = aws_vpc.default.id
@@ -47,7 +47,7 @@ resource "aws_ecs_service" "health_med_api" {
     security_groups = [
       aws_security_group.health_med_api_rds.id,
       aws_security_group.health_med_api_cache.id,
-      aws_security_group.ecs_service.id
+      aws_security_group.health_med_api_ecs_service.id
     ]
     assign_public_ip = true
   }
@@ -69,7 +69,7 @@ resource "aws_ecs_service" "health_med_api" {
   ]
 }
 
-resource "aws_cloudwatch_log_group" "ecs_service" {
+resource "aws_cloudwatch_log_group" "health_med_api_ecs_service" {
   name              = "/ecs/health-med-api"
   retention_in_days = 30
 
