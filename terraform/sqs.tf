@@ -82,6 +82,10 @@ output "sqs_api_appointment_created_arn" {
   value = aws_sqs_queue.api_appointment_created.arn
 }
 
+output "sqs_api_appointment_created_dlq_arn" {
+  value = aws_sqs_queue.api_appointment_created_dlq.arn
+}
+
 # =====================================================
 # ============= api_appointment-cancelled =============
 # =====================================================
@@ -159,4 +163,8 @@ resource "aws_sqs_queue_policy" "api_appointment_cancelled_queue_policy" {
 
 output "sqs_api_appointment_cancelled_arn" {
   value = aws_sqs_queue.api_appointment_cancelled.arn
+}
+
+output "sqs_api_appointment_cancelled_dlq_arn" {
+  value = aws_sqs_queue.api_appointment_cancelled_dlq.arn
 }
