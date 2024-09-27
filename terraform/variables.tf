@@ -74,6 +74,10 @@ variable "ecs_service_desired_count" {
 }
 
 # Secrets
+variable "DB_HOSTNAME" {
+  type = string
+}
+
 variable "DB_USERNAME" {
   type = string
 }
@@ -82,3 +86,10 @@ variable "DB_PASSWORD" {
   type = string
 }
 
+variable "REDIS_HOSTNAME" {
+  type = string
+}
+
+variable "JWT_SECRET" {
+  type = string
+}

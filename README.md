@@ -1,4 +1,4 @@
-# Health Med Infra
+# Health&Med Infra
 ![aws](https://img.shields.io/badge/Amazon_AWS-FF9900?style=for-the-badge&logo=amazonwebservices&logoColor=white)
 ![redis](https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white)
 ![mysql](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
@@ -52,6 +52,9 @@ export DB_PASSWORD=xxxxxx
 export REDIS_HOSTNAME=xxxxxx
 export SENDGRID_API_KEY=xxxxxx
 export SENDGRID_EMAIL=xxxxxx
+export SENDGRID_APPOINTMENT_CREATED_TEMPLATE_ID=xxxxxx
+export SENDGRID_APPOINTMENT_CANCELLED_TEMPLATE_ID=xxxxxx
+export JWT_SECRET=xxxxxx
 
 ```
 Or configure it in windows environments.

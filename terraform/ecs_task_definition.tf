@@ -15,11 +15,28 @@ resource "aws_iam_role" "ecs_task_definition_role" {
   tags = {
     Name = "${var.resource_prefix}-health-med-api_ecs-task-definition_role"
   }
+
+  depends_on = [
+    data.aws_iam_policy_document.ecs_task_definition
+  ]
 }
 
-resource "aws_iam_role_policy_attachment" "ecs_task_definition" {
+resource "aws_iam_role_policy_attachment" "AmazonECSTaskExecutionRole_ecs_task_definition" {
   role       = aws_iam_role.ecs_task_definition_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+
+  depends_on = [
+    aws_iam_role.ecs_task_definition_role
+  ]
+}
+
+resource "aws_iam_role_policy_attachment" "AmazonEC2ContainerRegistryFullAccess_ecs_task_definition" {
+  role       = aws_iam_role.ecs_task_definition_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess"
+
+  depends_on = [
+    aws_iam_role.ecs_task_definition_role
+  ]
 }
 
 resource "aws_ecs_task_definition" "health_med_api" {
@@ -39,7 +56,9 @@ resource "aws_ecs_task_definition" "health_med_api" {
   depends_on = [
     aws_ecs_cluster.default,
     aws_db_instance.health_med_api,
-    aws_elasticache_cluster.health_med_api
+    aws_elasticache_cluster.health_med_api,
+    aws_iam_role_policy_attachment.AmazonECSTaskExecutionRole_ecs_task_definition,
+    aws_iam_role_policy_attachment.AmazonEC2ContainerRegistryFullAccess_ecs_task_definition
   ]
 
   container_definitions = jsonencode([
@@ -63,7 +82,9 @@ resource "aws_ecs_task_definition" "health_med_api" {
         options = {
           awslogs-group         = "/ecs/health-med-api",
           awslogs-region        = "${var.region}",
-          awslogs-stream-prefix = "ecs"
+          awslogs-stream-prefix = "ecs",
+          awslogs-create-group  = "true",
+          mode                  = "non-blocking"
         }
       },
 
@@ -81,28 +102,28 @@ resource "aws_ecs_task_definition" "health_med_api" {
           value = "production"
         },
         {
-          name  = "DB_HOSTNAME",
-          value = "<db_hostname>"
-        },
-        {
           name  = "DB_DATABASE",
-          value = "<db_database>"
+          value = "${var.db_name}"
         },
         {
-          name  = "DB_USER",
-          value = "<db_user>"
+          name  = "DB_HOSTNAME",
+          value = "${var.DB_HOSTNAME}"
+        },
+        {
+          name  = "DB_USERNAME",
+          value = "${var.DB_USERNAME}"
         },
         {
           name  = "DB_PASSWORD",
-          value = "<db_password>"
+          value = "${var.DB_PASSWORD}"
         },
         {
           name  = "REDIS_HOSTNAME",
-          value = "<redis_hostname>"
+          value = "${var.REDIS_HOSTNAME}"
         },
         {
           name  = "JWT_SECRET",
-          value = "<jwt_secret>"
+          value = "${var.JWT_SECRET}"
         }
       ]
     }
