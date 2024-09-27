@@ -68,10 +68,11 @@ resource "aws_ecs_task_definition" "health_med_api" {
       },
 
       healthcheck = {
-        Command  = ["CMD-SHELL", "curl -f http://localhost:3000 || exit 1"],
-        Timeout  = 10,
-        Interval = 180,
-        Retries  = 10
+        command     = ["CMD-SHELL", "curl -f http://localhost:3000 || exit 1"],
+        timeout     = 5,
+        interval    = 30,
+        retries     = 3,
+        startPeriod = null
       },
 
       environment = [
